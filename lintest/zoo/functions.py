@@ -17,7 +17,7 @@ def make_stretched_tanh(w=1, stretch=1):
 if __name__ == '__main__':
     from lintest.testers.linearity import linearity_tester
     w = np.array([1., -1., 0.5])
-    f = make_corrupted_linear(w, 0)
+    f = make_corrupted_linear(w, 1e-9)
     assert linearity_tester(f, 3) == True
     
     g = make_stretched_tanh(w, 1e6)
