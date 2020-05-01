@@ -1,11 +1,15 @@
 import numpy as np
 
 
-BALL_RADIUS = 1 / 50
-RTOL = 1e-05
-ATOL = 1e-08
+BALL_RADIUS = 1 / 50 #radius of L2 ball
+RTOL = 1e-05 #relative tolerance for closeness checks
+ATOL = 1e-08 #absolute tolerance for closeness checks
 
 def count_unique_floats(x, rtol=1e-05, atol=1e-08):
+    """
+    Counts the unique elements of numpy array x up to the specified tolerance
+    See numpy.isclose for the meaning of rtol and atol
+    """
     #Check if array has at least two elements
     if x.size < 2: 
         return x.size

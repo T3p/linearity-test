@@ -1,3 +1,7 @@
+"""
+Distribution-Free Additivity Tester
+Fleming and Yoshida, "Distribution-Free Testing of Linear Functions on R^n, (ITCS 2020)
+"""
 import numpy as np
 import math
 from lintest.utils import RTOL, ATOL
@@ -5,6 +9,23 @@ from lintest.zoo.distributions import standard
 from lintest.testers.additivity import _test_additive, _query_additive
 
 def linearity_tester(f, input_dim, eps, conf=0.9, distr=standard):
+    """
+    Distribution-free linearity tester
+    
+    Args:
+        f: a vectorized *continuous* function R^d -> R^m mapping nxd numpy 
+        arrays into nxm numpy arrays, where d denotes the domain dimension, 
+        m the codomain dimension and n the number of queried points
+        input_dim: dimension of function domain according to the above 
+            definition
+        eps: closeness parameter
+        conf: one minus the probability of a false positive
+        distr: input distribution
+        
+    Returns:
+        True if the function is eps-close to linear under distr
+        Otherwise, False with probability at least conf
+    """
     n_samples = math.ceil(2 / eps * math.log(1 / (1 - conf))) + 1
     
     g =  _force_negativity(f, input_dim, eps, conf, distr)
