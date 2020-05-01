@@ -1,3 +1,4 @@
+"""Distributions to play with"""
 import numpy as np
 
 def standard(n, d):

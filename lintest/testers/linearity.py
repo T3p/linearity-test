@@ -8,7 +8,7 @@ from lintest.utils import RTOL, ATOL
 from lintest.zoo.distributions import standard
 from lintest.testers.additivity import _test_additive, _query_additive
 
-def linearity_tester(f, input_dim, eps, conf=0.9, distr=standard):
+def linearity_tester(f, input_dim, eps=0.1, conf=0.9, distr=standard):
     """
     Distribution-free linearity tester
     
@@ -50,7 +50,7 @@ def linearity_tester(f, input_dim, eps, conf=0.9, distr=standard):
 def _force_negativity(f, input_dim, eps, conf, distr):
     n_samples = math.ceil(1 / eps * math.log(1 / (1 - conf)))
     
-    x = distr(input_dim, n_samples)
+    x = distr(n_samples, input_dim)
     if not np.allclose(f(-x), -f(x), RTOL, ATOL):
         return False
     

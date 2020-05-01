@@ -8,7 +8,7 @@ from lintest.utils import count_unique_floats, BALL_RADIUS, RTOL, ATOL
 from lintest.zoo.distributions import standard
 
 
-def additivity_tester(f, input_dim, eps, conf=0.9, distr=standard):
+def additivity_tester(f, input_dim, eps=0.1, conf=0.9, distr=standard):
     """
     Distribution-free additivity tester
     
