@@ -1,6 +1,10 @@
 import numpy as np
 
 
+BALL_RADIUS = 1 / 50
+RTOL = 1e-05
+ATOL = 1e-08
+
 def count_unique_floats(x, rtol=1e-05, atol=1e-08):
     #Check if array has at least two elements
     if x.size < 2: 

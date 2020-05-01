@@ -4,13 +4,9 @@ Fleming and Yoshida, "Distribution-Free Testing of Linear Functions on R^n, (ITC
 """
 import numpy as np
 import math
-from lintest.utils import count_unique_floats
+from lintest.utils import count_unique_floats, BALL_RADIUS, RTOL, ATOL
 from lintest.zoo.distributions import standard
 
-
-BALL_RADIUS = 1 / 50
-RTOL = 1e-05
-ATOL = 1e-08
 
 def additivity_tester(f, input_dim, eps, conf=0.9, distr=standard):
     n_samples = math.ceil(2 / eps * math.log(1 / (1 - conf))) + 1
@@ -23,14 +19,14 @@ def additivity_tester(f, input_dim, eps, conf=0.9, distr=standard):
     samples = distr(n_samples, input_dim)
     for p in samples:
         answer = _query_additive(p, f, eps, conf)
-        if type(answer)==bool:
+        if type(answer) == bool:
             return answer
         if not np.allclose(f(p), answer):
             return False
     
     return True
 
-def _test_additive(f, input_dim, conf=0.9):
+def _test_additive(f, input_dim, conf):
     n_samples = math.ceil(math.log(1 / (1 - conf)) / math.log(100. / 99)) + 1
     
     x = standard(n_samples, input_dim)
@@ -75,8 +71,8 @@ if __name__ == '__main__':
     
     x = np.array([0.3, 1, -2])
     
-    assert _test_additive(f, 5) == True
-    assert _test_additive(g, 5) == False
+    assert _test_additive(f, 5, 0.9) == True
+    assert _test_additive(g, 5, 0.9) == False
     
     assert _query_additive(x, f, 0.1, 0.9).size == 3
     assert not _query_additive(x, g, 0.1, 0.9)
