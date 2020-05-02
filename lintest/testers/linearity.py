@@ -15,7 +15,7 @@ def linearity_tester(f, input_dim, eps=0.1, conf=0.9, distr=standard):
     Args:
         f: a vectorized *continuous* function R^d -> R^m mapping nxd numpy 
         arrays into nxm numpy arrays, where d denotes the domain dimension, 
-        m the codomain dimension and n the number of queried points
+        m the codomain dimension and n the number of points queried at once
         input_dim: dimension of function domain according to the above 
             definition
         eps: closeness parameter
@@ -28,16 +28,17 @@ def linearity_tester(f, input_dim, eps=0.1, conf=0.9, distr=standard):
     """
     n_samples = math.ceil(2 / eps * math.log(1 / (1 - conf))) + 1
     
+    #Exploit continuity
     g =  _force_negativity(f, input_dim, eps, conf, distr)
     if type(g) == bool:
         return g
     
-    #Additivity
+    #Linearity
     if not _test_additive(g, input_dim, conf):
         return False
     
-    #Epsilon-additivity
-    samples = distr(n_samples, input_dim)
+    #Epsilon-linearity
+    samples = distr((n_samples, input_dim))
     for p in samples:
         answer = _query_additive(p, g, eps, conf)
         if type(answer) == bool:
@@ -50,7 +51,7 @@ def linearity_tester(f, input_dim, eps=0.1, conf=0.9, distr=standard):
 def _force_negativity(f, input_dim, eps, conf, distr):
     n_samples = math.ceil(1 / eps * math.log(1 / (1 - conf)))
     
-    x = distr(n_samples, input_dim)
+    x = distr((n_samples, input_dim))
     if not np.allclose(f(-x), -f(x), RTOL, ATOL):
         return False
     
